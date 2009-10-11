@@ -1,0 +1,11 @@
+[Epiphany Extension]
+Name=Confirm window close
+Description=Confirm closing of windows with multiple tabs
+Authors=Jonny Lamb <jonny@debian.org>
+Version=1
+URL=http://jonnylamb.com/
+
+
+[Loader]
+Type=shlib
+Library=%EXTENSION_DIR%/%LIBRARY%

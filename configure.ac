@@ -127,6 +127,7 @@ AC_CONFIG_FILES([
 Makefile
 extensions/Makefile
 extensions/sample/Makefile
+extensions/confirmwindowclose/Makefile
 ])
 
 AC_OUTPUT
