@@ -112,8 +112,6 @@ static void
 ephy_confirmwindowclose_extension_class_init (
     EphyConfirmwindowcloseExtensionClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
   parent_class = g_type_class_peek_parent (klass);
 }
 
