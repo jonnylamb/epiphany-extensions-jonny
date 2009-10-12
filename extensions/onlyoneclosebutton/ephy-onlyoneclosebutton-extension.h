@@ -1,5 +1,5 @@
 /*
- *  Copyright © 2009 Jonny Lamb
+ *  Copyright © 2009 Jonny Lamb <jonny@debian.org>
  *
  *  based on the Python extension by Stefan Stuhr:
  *    Copyright (C) 2006 Stefan Stuhr
