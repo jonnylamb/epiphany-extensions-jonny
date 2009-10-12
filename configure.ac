@@ -137,6 +137,7 @@ extensions/confirmwindowclose/Makefile
 extensions/onlyoneclosebutton/Makefile
 extensions/onlyoneclosebutton/egg/Makefile
 extensions/tabkeynavigate/Makefile
+extensions/middleclickclose/Makefile
 ])
 
 AC_OUTPUT

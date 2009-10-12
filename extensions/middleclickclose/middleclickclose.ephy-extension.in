@@ -1,0 +1,11 @@
+[Epiphany Extension]
+Name=Middle click close tabs
+Description=Close tabs with a middle click on the tab
+Authors=Jonny Lamb <jonny@debian.org>
+Version=1
+URL=http://jonnylamb.com/
+
+
+[Loader]
+Type=shlib
+Library=%EXTENSION_DIR%/%LIBRARY%
