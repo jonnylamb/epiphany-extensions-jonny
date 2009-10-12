@@ -1,0 +1,11 @@
+[Epiphany Extension]
+Name=Tab Key Tab Navigate
+Description=Use the tab key to navigate between tabs
+Authors=Jonny Lamb <jonny@debian.org>
+Version=1
+URL=http://jonnylamb.com/
+
+
+[Loader]
+Type=shlib
+Library=%EXTENSION_DIR%/%LIBRARY%
