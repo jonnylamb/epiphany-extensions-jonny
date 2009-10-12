@@ -193,20 +193,6 @@ hbox_style_set_cb (GtkWidget *hbox,
     GtkStyle *previous_style,
     StyleSetData *user_data)
 {
-  GHashTable *data, *tab_data, *single_tab_data;
-  gint width;
-
-  data = g_hash_table_lookup (user_data->extension->priv->win_data,
-      user_data->window);
-  tab_data = g_hash_table_lookup (user_data->extension->priv->tab_datas,
-      user_data->window);
-  single_tab_data = g_hash_table_lookup (tab_data, user_data->embed);
-
-  gtk_widget_get_size_request (hbox, &width, NULL);
-
-  g_hash_table_insert (single_tab_data, "tab_initial_width",
-      GINT_TO_POINTER (width));
-
   gtk_widget_set_size_request (hbox, 16, -1);
 }
 
@@ -220,7 +206,6 @@ attach_tab (EphyExtension *ext,
   GHashTable *data, *tab_data, *single_tab_data;
   GtkWidget *notebook, *widget, *last_child;
   GList *children;
-  gint width;
   StyleSetData *user_data;
 
   data = g_hash_table_lookup (extension->priv->win_data, window);
@@ -239,10 +224,6 @@ attach_tab (EphyExtension *ext,
 
   children = gtk_container_get_children (GTK_CONTAINER (widget));
 
-  gtk_widget_get_size_request (widget, &width, NULL);
-
-  g_hash_table_insert (single_tab_data, "tab_initial_width",
-      GINT_TO_POINTER (width));
 
   gtk_widget_set_size_request (widget, 16, -1);
 
@@ -274,9 +255,7 @@ detach_tab (EphyExtension *ext,
   EphyOnlyoneclosebuttonExtension *extension =
     EPHY_ONLYONECLOSEBUTTON_EXTENSION (ext);
   GHashTable *data, *tab_data, *single_tab_data;
-  GtkWidget *notebook, *widget, *last_child;
-  GList *children;
-  gint width;
+  GtkWidget *notebook, *widget;
 
   data = g_hash_table_lookup (extension->priv->win_data, window);
   tab_data = g_hash_table_lookup (extension->priv->tab_datas, window);
@@ -292,24 +271,6 @@ detach_tab (EphyExtension *ext,
           "tab-expand", FALSE, NULL);
     }
 
-  if (!GTK_IS_HBOX (widget))
-    goto out;
-
-  children = gtk_container_get_children (GTK_CONTAINER (widget));
-
-  width = GPOINTER_TO_INT (g_hash_table_lookup (single_tab_data,
-          "tab_initial_width"));
-
-  gtk_widget_set_size_request (widget, width, -1);
-
-  last_child = g_list_last (children)->data;
-
-  if (GTK_IS_BUTTON (last_child))
-    gtk_widget_show (last_child);
-
-  g_list_free (children);
-
-out:
   g_hash_table_remove (tab_data, embed);
 }
 
