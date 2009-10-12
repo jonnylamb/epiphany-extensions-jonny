@@ -44,6 +44,9 @@ AC_PROG_MAKE_SET
 
 AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
 AC_PATH_PROG(GCONFTOOL, [gconftool-2])
+AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
+AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums])
+
 AM_GCONF_SOURCE_2
 
 AC_SUBST([AM_CXXFLAGS])
@@ -62,6 +65,10 @@ if test "x$enable_maintainer_mode" = "xyes"; then
 	enable_debug=yes
         DEPRECATION_FLAGS="-DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGCONF_DISABLE_DEPRECATED -DLIBGLADE_DISABLE_DEPRECATED -DPANGO_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED -DG_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_SINGLE_INCLUDES"
 fi
+
+GETTEXT_PACKAGE=epiphany-extensions-jonny
+AC_SUBST([GETTEXT_PACKAGE])
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
 
 # ********************************
 # pkg config checks
@@ -128,6 +135,8 @@ Makefile
 extensions/Makefile
 extensions/sample/Makefile
 extensions/confirmwindowclose/Makefile
+extensions/onlyoneclosebutton/Makefile
+extensions/onlyoneclosebutton/egg/Makefile
 ])
 
 AC_OUTPUT

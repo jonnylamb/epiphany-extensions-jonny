@@ -1,1 +1,1 @@
-SUBDIRS = confirmwindowclose
+SUBDIRS = confirmwindowclose onlyoneclosebutton

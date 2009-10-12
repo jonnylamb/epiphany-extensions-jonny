@@ -1,0 +1,11 @@
+[Epiphany Extension]
+Name=Only One Close Button
+Description=One on each tab is a waste of space and increases the risk of accidental closing
+Authors=Jonny Lamb <jonny@debian.org>
+Version=1
+URL=http://jonnylamb.com/
+
+
+[Loader]
+Type=shlib
+Library=%EXTENSION_DIR%/%LIBRARY%
