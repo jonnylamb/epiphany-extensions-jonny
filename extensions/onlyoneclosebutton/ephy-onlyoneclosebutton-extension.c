@@ -52,6 +52,20 @@ static GType type = 0;
   "</popup>" \
   "</ui>"
 
+typedef struct
+{
+  EphyOnlyoneclosebuttonExtension *extension;
+  EphyWindow *window;
+  EphyEmbed *embed;
+} StyleSetData;
+
+static void
+style_set_data_free (gpointer data,
+    GClosure *foo)
+{
+  g_slice_free (StyleSetData, data);
+}
+
 static void
 ephy_onlyoneclosebutton_extension_init (
     EphyOnlyoneclosebuttonExtension *extension)
@@ -174,13 +188,6 @@ detach_window (EphyExtension *ext,
   g_hash_table_remove (extension->priv->tab_datas, window);
 }
 
-typedef struct
-{
-  EphyOnlyoneclosebuttonExtension *extension;
-  EphyWindow *window;
-  EphyEmbed *embed;
-} StyleSetData;
-
 static void
 hbox_style_set_cb (GtkWidget *hbox,
     GtkStyle *previous_style,
@@ -214,7 +221,6 @@ attach_tab (EphyExtension *ext,
   GtkWidget *notebook, *widget, *last_child;
   GList *children;
   gint width;
-  gulong handler_id;
   StyleSetData *user_data;
 
   data = g_hash_table_lookup (extension->priv->win_data, window);
@@ -245,12 +251,9 @@ attach_tab (EphyExtension *ext,
   user_data->window = window;
   user_data->embed = embed;
 
-  /* FIXME: LEAK */
-  handler_id = g_signal_connect (widget, "style-set",
-      G_CALLBACK (hbox_style_set_cb), user_data);
-
-  g_hash_table_insert (single_tab_data, "hbox_style_set_hid",
-      GUINT_TO_POINTER (handler_id));
+  g_signal_connect_data (widget, "style-set",
+      G_CALLBACK (hbox_style_set_cb), user_data,
+      style_set_data_free, G_CONNECT_AFTER);
 
   last_child = g_list_last (children)->data;
 
@@ -273,7 +276,6 @@ detach_tab (EphyExtension *ext,
   GHashTable *data, *tab_data, *single_tab_data;
   GtkWidget *notebook, *widget, *last_child;
   GList *children;
-  gulong handler_id;
   gint width;
 
   data = g_hash_table_lookup (extension->priv->win_data, window);
@@ -294,11 +296,6 @@ detach_tab (EphyExtension *ext,
     goto out;
 
   children = gtk_container_get_children (GTK_CONTAINER (widget));
-
-  handler_id = GPOINTER_TO_UINT (g_hash_table_lookup (single_tab_data,
-          "hbox_style_set_hid"));
-
-  g_signal_handler_disconnect (widget, handler_id);
 
   width = GPOINTER_TO_INT (g_hash_table_lookup (single_tab_data,
           "tab_initial_width"));
