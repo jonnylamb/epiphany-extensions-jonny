@@ -133,7 +133,6 @@ fi
 AC_CONFIG_FILES([
 Makefile
 extensions/Makefile
-extensions/sample/Makefile
 extensions/confirmwindowclose/Makefile
 extensions/onlyoneclosebutton/Makefile
 extensions/onlyoneclosebutton/egg/Makefile
