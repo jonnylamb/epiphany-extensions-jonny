@@ -27,18 +27,8 @@
 
 #include <gmodule.h>
 
-#define EPHY_CONFIRMWINDOWCLOSE_EXTENSION_GET_PRIVATE(object) \
-  (G_TYPE_INSTANCE_GET_PRIVATE ((object), \
-      EPHY_TYPE_CONFIRMWINDOWCLOSE_EXTENSION, \
-      EphyConfirmwindowcloseExtensionPrivate))
-
 #define DELETE_EVENT_SIGNAL \
   (g_quark_from_static_string ("confirmwindowclose_delete_event"))
-
-struct _EphyConfirmwindowcloseExtensionPrivate
-{
-  gpointer dummy;
-};
 
 static GObjectClass *parent_class = NULL;
 
@@ -48,7 +38,6 @@ static void
 ephy_confirmwindowclose_extension_init (
     EphyConfirmwindowcloseExtension *extension)
 {
-  extension->priv = EPHY_CONFIRMWINDOWCLOSE_EXTENSION_GET_PRIVATE (extension);
 }
 
 static gboolean
@@ -126,9 +115,6 @@ ephy_confirmwindowclose_extension_class_init (
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
-
-  g_type_class_add_private (object_class,
-      sizeof (EphyConfirmwindowcloseExtensionPrivate));
 }
 
 GType
