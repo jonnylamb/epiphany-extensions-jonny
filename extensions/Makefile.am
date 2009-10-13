@@ -1,1 +1,1 @@
-SUBDIRS = confirmwindowclose onlyoneclosebutton tabkeynavigate middleclickclose
+SUBDIRS = confirmwindowclose onlyoneclosebutton tabkeynavigate middleclickclose shortcutresolve

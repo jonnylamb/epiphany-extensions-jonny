@@ -1,0 +1,11 @@
+[Epiphany Extension]
+Name=Shortcut URL resolving
+Description=Use shortcuts to resolve certain addresses according to bookmarks
+Authors=Jonny Lamb <jonny@debian.org>
+Version=1
+URL=http://jonnylamb.com/
+
+
+[Loader]
+Type=shlib
+Library=%EXTENSION_DIR%/%LIBRARY%

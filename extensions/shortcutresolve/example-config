@@ -1,0 +1,16 @@
+# Put this file at ~/.config/epiphany-shortcutresolve/shortcuts
+
+# The pattern and replacement options are input to g_regex_new and
+# g_regex_replace respectively (i.e. PCRE).
+
+[Debian BTS]
+prefix=bts
+url=http://bugs.debian.org/%s
+pattern=^#
+replacement=
+
+[GNOME Bugzilla]
+prefix=gbz
+url=https://bugzilla.gnome.org/show_bug.cgi?id=%s
+pattern=^#
+replacement=
