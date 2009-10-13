@@ -109,11 +109,10 @@ resolve_cb (EphyBookmarks *eb,
   return out;
 }
 
-static gboolean
+static void
 load_shortcuts (EphyShortcutresolveExtension *extension)
 {
   GKeyFile *keyfile;
-  gboolean out = TRUE;
   gchar **groups, **g;
 
   g_hash_table_remove_all (extension->priv->shortcuts);
@@ -124,7 +123,7 @@ load_shortcuts (EphyShortcutresolveExtension *extension)
           G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, NULL))
     {
       g_warning ("Failed to load keyfile: %s", extension->priv->filename);
-      out = FALSE;
+      return;
     }
 
   groups = g_key_file_get_groups (keyfile, NULL);
@@ -147,8 +146,6 @@ load_shortcuts (EphyShortcutresolveExtension *extension)
 
   g_strfreev (groups);
   g_key_file_free (keyfile);
-
-  return out;
 }
 
 static void
@@ -204,8 +201,7 @@ ephy_shortcutresolve_extension_init (
       G_CALLBACK (changed_cb), extension);
   g_object_unref (file);
 
-  if (!load_shortcuts (extension))
-    return;
+  load_shortcuts (extension);
 
   shell = ephy_shell_get_default ();
 
@@ -223,11 +219,15 @@ finalize (GObject *object)
   EphyShell *shell;
   EphyBookmarks *bookmarks;
 
-  shell = ephy_shell_get_default ();
-  bookmarks = ephy_shell_get_bookmarks (shell);
+  if (extension->priv->resolve_address_id > 0)
+    {
+      shell = ephy_shell_get_default ();
+      bookmarks = ephy_shell_get_bookmarks (shell);
 
-  g_signal_handler_disconnect (bookmarks, extension->priv->resolve_address_id);
-  extension->priv->resolve_address_id = 0;
+      g_signal_handler_disconnect (bookmarks,
+          extension->priv->resolve_address_id);
+      extension->priv->resolve_address_id = 0;
+    }
 
   g_free (extension->priv->filename);
   extension->priv->filename = NULL;
@@ -235,9 +235,12 @@ finalize (GObject *object)
   g_hash_table_destroy (extension->priv->shortcuts);
   extension->priv->shortcuts = NULL;
 
-  g_signal_handler_disconnect (extension->priv->monitor,
-      extension->priv->changed_id);
-  extension->priv->changed_id = 0;
+  if (extension->priv->changed_id > 0)
+    {
+      g_signal_handler_disconnect (extension->priv->monitor,
+          extension->priv->changed_id);
+      extension->priv->changed_id = 0;
+    }
 
   g_object_unref (extension->priv->monitor);
   extension->priv->monitor = NULL;
