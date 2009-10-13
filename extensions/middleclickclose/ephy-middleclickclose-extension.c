@@ -24,8 +24,8 @@
 
 #include <gmodule.h>
 
-#define DELETE_EVENT_SIGNAL \
-  (g_quark_from_static_string ("middleclickclose_delete_event"))
+#define HANDLER_ID \
+  (g_quark_from_static_string ("middleclickclose_handler_id"))
 
 static GObjectClass *parent_class = NULL;
 
@@ -179,17 +179,42 @@ attach_window (EphyExtension *ext,
     EphyWindow *window)
 {
   GtkWidget *notebook;
+  gulong handler_id;
 
   notebook = ephy_window_get_notebook (window);
 
-  g_signal_connect (notebook, "button-press-event",
-          G_CALLBACK (button_press_event_cb), window);
+  handler_id = g_signal_connect (notebook, "button-press-event",
+      G_CALLBACK (button_press_event_cb), window);
+
+  g_object_set_qdata (G_OBJECT (notebook), HANDLER_ID,
+      GUINT_TO_POINTER (handler_id));
+}
+
+static void
+detach_window (EphyExtension *ext,
+    EphyWindow *window)
+{
+  GtkWidget *notebook;
+  gulong handler_id;
+  gpointer data;
+
+  notebook = ephy_window_get_notebook (window);
+
+  data = g_object_get_qdata (G_OBJECT (notebook), HANDLER_ID);
+
+  if (data == NULL)
+    return;
+
+  handler_id = GPOINTER_TO_UINT (data);
+
+  g_signal_handler_disconnect (notebook, handler_id);
 }
 
 static void
 ephy_middleclickclose_extension_iface_init (EphyExtensionIface *iface)
 {
   iface->attach_window = attach_window;
+  iface->detach_window = detach_window;
 }
 
 static void
