@@ -152,7 +152,7 @@ button_press_event_cb (GtkWidget *widget,
   gint tab_number;
   EphyEmbed *embed;
 
-  if (event->button != 2)
+  if (event->button != 2 || event->type != GDK_BUTTON_PRESS)
     return FALSE;
 
   /* I wish this wasn't so gash and copy-pasty... Connecting
